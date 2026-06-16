@@ -16,6 +16,7 @@ dependencies = [
     "opencv-python",
     "optax>=0.2.8",
     "pandas>=3.0.3",
+    "pylsl>=1.18.2",
     "python-osc>=1.10.2",
     "tensorflow>=2.21.0",
     "tqdm>=4.68.2",
