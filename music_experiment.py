@@ -24,7 +24,10 @@ _NAME = flags.DEFINE_string(
     required=True,
     help="Experiment name",
 )
-_MUSIC_DURATION = flags.DEFINE_integer("music_duration", default=30, help="music duration")
+_MUSIC_DURATION = flags.DEFINE_integer("music_duration",
+                                       default=30,
+                                       help="music duration")
+
 
 def apply_fade(audio, samplerate=48000, fade_duration=2):
     num_samples_fade = int(fade_duration * samplerate)
@@ -91,6 +94,7 @@ def main(argv):
                 start = random.randint(a=0, b=len(audio) - num_audio_samples)
                 audio = audio[start:start + num_audio_samples]
                 audio = apply_fade(audio)
+                starting_sec = start / 48000
 
                 start = time.time()
                 sd.play(audio, samplerate=48000)
@@ -98,13 +102,17 @@ def main(argv):
                 while time.time() - start < audio_duration:
                     samples, timestamps = lsl_device.pull_chunk(timeout=1.)
                     for sample, timestamp in zip(samples, timestamps):
-                        sample_bytes = np.asarray(sample).astype(np.float32).tobytes()
+                        sample_bytes = np.asarray(sample).astype(
+                            np.float32).tobytes()
                         pbar.update()
                         current_measures.append(
-                            dict(sample=sample_bytes,
-                                 audio_path=audio_path,
-                                 repeat=repeat,
-                                 timestamp=timestamp), )
+                            dict(
+                                sample=sample_bytes,
+                                audio_path=audio_path,
+                                repeat=repeat,
+                                timestamp=timestamp,
+                                starting_sec=starting_sec,
+                            ), )
                 sd.wait()
                 df = pd.DataFrame(current_measures)
                 df["sample"] = df["sample"].map(
