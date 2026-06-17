@@ -1,7 +1,9 @@
+import os
 import pandas as pd
 import pylsl
 import tqdm
 from absl import app, flags
+import pathlib
 
 _NAME = flags.DEFINE_string(
     "name",
@@ -27,21 +29,30 @@ def main(argv):
         for s in streams:
             print(s)
 
+        index = int(input("select device: "))
+        stream_info = streams[index]
+
     inlet = pylsl.StreamInlet(stream_info)
 
-    inputs = []
+    recordings_dir = pathlib.Path("recordings")
+    recordings_dir.mkdir(exist_ok=True)
+    output_file = recordings_dir / (_NAME.value + ".csv")
 
+    first_write = not output_file.exists()
     pbar = tqdm.tqdm()
 
     try:
         while True:
             sample, timestamp = inlet.pull_sample()
-            inputs.append(dict(values=sample, timestamp=timestamp))
+            pd.DataFrame([dict(values=sample, timestamp=timestamp)
+                          ]).to_csv(output_file,
+                                    mode='a',
+                                    header=first_write,
+                                    index=False)
+            first_write = False
             pbar.update()
     except:
         print("stopping...")
-
-    pd.DataFrame(inputs).to_csv(_NAME.value + ".csv")
 
 
 if __name__ == "__main__":
