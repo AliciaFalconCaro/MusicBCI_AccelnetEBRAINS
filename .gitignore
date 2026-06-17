@@ -11,5 +11,7 @@ wheels/
 
 .ipynb_checkpoints/
 Untitled.ipynb
+*.wav
+*.opus
 *.DS_Store
 *.csv

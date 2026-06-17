@@ -648,9 +648,11 @@ dependencies = [
     { name = "pandas" },
     { name = "pylsl" },
     { name = "python-osc" },
+    { name = "sounddevice" },
     { name = "tensorflow" },
     { name = "tqdm" },
     { name = "yapf" },
+    { name = "yt-dlp" },
 ]
 
 [package.metadata]
@@ -669,9 +671,11 @@ requires-dist = [
     { name = "pandas", specifier = ">=3.0.3" },
     { name = "pylsl", specifier = ">=1.18.2" },
     { name = "python-osc", specifier = ">=1.10.2" },
+    { name = "sounddevice", specifier = ">=0.5.5" },
     { name = "tensorflow", specifier = ">=2.21.0" },
     { name = "tqdm", specifier = ">=4.68.2" },
     { name = "yapf", specifier = ">=0.43.0" },
+    { name = "yt-dlp", specifier = ">=2026.6.9" },
 ]
 
 [[package]]
@@ -3028,6 +3032,15 @@ dependencies = [
 sdist = { url = "https://us-python.pkg.dev/artifact-foundry-prod/ah-3p-staging-python/yapf/yapf-0.43.0.tar.gz", hash = "sha256:00d3aa24bfedff9420b2e0d5d9f5ab6d9d4268e72afbf59bb3fa542781d5218e" }
 wheels = [
     { url = "https://us-python.pkg.dev/artifact-foundry-prod/ah-3p-staging-python/yapf/yapf-0.43.0-py3-none-any.whl", hash = "sha256:224faffbc39c428cb095818cf6ef5511fdab6f7430a10783fdfb292ccf2852ca" },
+]
+
+[[package]]
+name = "yt-dlp"
+version = "2026.6.9"
+source = { registry = "https://us-python.pkg.dev/artifact-foundry-prod/ah-3p-staging-python/simple/" }
+sdist = { url = "https://us-python.pkg.dev/artifact-foundry-prod/ah-3p-staging-python/yt-dlp/yt_dlp-2026.6.9.tar.gz", hash = "sha256:d50fcb95f48d61bedde33e408c1881d4c279e51c31354a599ce09e96ba0f4b86" }
+wheels = [
+    { url = "https://us-python.pkg.dev/artifact-foundry-prod/ah-3p-staging-python/yt-dlp/yt_dlp-2026.6.9-py3-none-any.whl", hash = "sha256:442ba4c75724b9496144c8434b617962ee08d0ee7c26ec663848fe9b78d5a3e4" },
 ]
 
 [[package]]
