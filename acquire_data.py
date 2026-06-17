@@ -38,7 +38,7 @@ def main(argv):
             sample, timestamp = inlet.pull_sample()
             inputs.append(dict(values=sample, timestamp=timestamp))
             pbar.update()
-    except KeyboardInterrupt:
+    except:
         print("stopping...")
 
     pd.DataFrame(inputs).to_csv(_NAME.value + ".csv")
