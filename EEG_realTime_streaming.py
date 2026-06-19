@@ -20,8 +20,8 @@ def main():
 
     print("Looking for an EEG stream...")
     #streams = pylsl.resolve_byprop('type', 'EEG')
-    streams1 = pylsl.resolve_byprop('name', 'X.on-102801-0035') #it was 71: clara
-    streams2 = pylsl.resolve_byprop('name', 'X.on-102106-0071') #it was 35: lianne on thursday
+    streams1 = pylsl.resolve_byprop('name', 'X.on-102801-0071') #it was 71: clara
+    streams2 = pylsl.resolve_byprop('name', 'X.on-102106-0035') #it was 35: lianne on thursday
 
 #on friday, phoebe on 35, Alicia on 71
     if not streams1 or not streams2:
@@ -57,19 +57,19 @@ def main():
     filename2 = f"eeg2_data_{currentDate}.csv"
 
     #real-time plotting in interactive mode
-    y_offset = 100 #channel separation for visualization
-    plt.ion()
-    fig, ax = plt.subplots(figsize=(10, 8))
-    lines=[]
+    # y_offset = 100 #channel separation for visualization
+    # plt.ion()
+    # fig, ax = plt.subplots(figsize=(10, 8))
+    # lines=[]
     #
-    for ch in range(n_channels):
-         line, =ax.plot([],[],lw=1)
-         lines.append(line)
-
-    ax.set_xlabel("Time (s)")
-    ax.set_ylabel("Amplitude")
-    ax.set_title("EEG Data Preview (2s windows)")
-    ax.set_xlim(0, Window_Seg)
+    # for ch in range(n_channels):
+    #      line, =ax.plot([],[],lw=1)
+    #      lines.append(line)
+    #
+    # ax.set_xlabel("Time (s)")
+    # ax.set_ylabel("Amplitude")
+    # ax.set_title("EEG Data Preview (2s windows)")
+    # ax.set_xlim(0, Window_Seg)
     last_plot_time = time.time()
 
 
@@ -124,52 +124,41 @@ def main():
                 time_window = np.concatenate((
                         timestamp_buffer[buffer_index:],
                         timestamp_buffer[:buffer_index]
-                ))
+                )).flatten()
 
                 time_window = time_window - time_window[0]
 
                 # Update graph data structures
-                for ch in range(n_channelsEEG):
-                    lines[ch].set_data(time_window, window[:, ch] + ch * y_offset)
-
-                # Set Y dynamic range based on incoming signal variations
-                ax.set_ylim(
-                    np.min(window) - 20,
-                    np.max(window) + y_offset * n_channelsEEG + 20
-                )
-
-                fig.canvas.draw()
-                fig.canvas.flush_events()
-                plt.pause(0.001)  # Yields execution momentarily to let OS refresh the GUI window
+                # for ch in range(n_channelsEEG):
+                #     lines[ch].set_data(time_window, window[:, ch] + ch * y_offset)
+                #
+                # # Set Y dynamic range based on incoming signal variations
+                # ax.set_ylim(
+                #     np.min(window) - 20,
+                #     np.max(window) + y_offset * n_channelsEEG + 20
+                # )
+                #
+                # fig.canvas.draw()
+                # fig.canvas.flush_events()
+                # plt.pause(0.1)  # Yields execution momentarily to let OS refresh the GUI window
 
                 #using multiple plotting instead of iterative
-                    #print("window in progress")
-                    # window = np.concatenate((
-                    #     eeg_buffer[buffer_index:],
-                    #     eeg_buffer[:buffer_index]
-                    # ))
-                    #
-                    # time_window = np.concatenate((
-                    #     timestamp_buffer[buffer_index:],
-                    #     timestamp_buffer[:buffer_index]
-                    # )).flatten()
-                    #
-                    # time_window = time_window-[0]
+                print("window in progress")
 
-                    #Preprocessing: notch, filtering, re-referencing and DC removal
-                    #window=window -np.mean(window) #DC removal
+                #Preprocessing: notch, filtering, re-referencing and DC removal
+                #window=window -np.mean(window) #DC removal
 
-                    # Plot each 2 seconds
-                    #plt.figure(figsize=(12, 6))
-                    # for ch in range(n_channels):
-                    #     plt.plot(time_window, window[:, ch] + ch * 50)
-                    #
-                    # plt.xlabel("Time (s)")
-                    # plt.ylabel("Amplitude + offset")
-                    # plt.title("EEG Data Preview")
-                    # plt.legend(loc="upper right")
-                    # plt.tight_layout()
-                    # plt.show()
+                #Plot each 2 seconds
+                plt.figure(figsize=(12, 6))
+                for ch in range(n_channelsEEG):
+                    plt.plot(time_window, window[:, ch] + ch * 50)
+
+                plt.xlabel("Time (s)")
+                plt.ylabel("Amplitude + offset")
+                plt.title("EEG Data Preview")
+                plt.legend(loc="upper right")
+                plt.tight_layout()
+                plt.show()
 
         except KeyboardInterrupt:
             print("\nStopping...")
